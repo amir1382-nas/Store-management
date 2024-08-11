@@ -1,16 +1,15 @@
-package com.example.Store.management.Product;
+package com.example.Store.management.Customer;
 
-public class Product {
+public class Customer {
     private int id;
     private String name;
-    private double price;
+    private String email;
 
     // Constructor, getters, and setters
-
-    public Product(int id, String name, double price) {
+    public Customer(int id, String name, String email) {
         this.id = id;
         this.name = name;
-        this.price = price;
+        this.email = email;
     }
 
     public int getId() {
@@ -29,12 +28,11 @@ public class Product {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setEmail(String email) {
+        this.email = email;
     }
-
 }
