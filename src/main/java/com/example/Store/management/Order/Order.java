@@ -1,42 +1,30 @@
 package com.example.Store.management.Order;
 
-import com.example.Store.management.Product.Product;
 
+import com.example.Store.management.Product.Product;
+//import jakarta.persistence.;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import java.util.List;
 
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "orders")
 public class Order {
-    private int id;
+
+    @jakarta.persistence.Id    // خونده بشه
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private int customerId;
+    @Transient    // خونده بشه
     private List<Product> products;
 
-    // Constructor, getters, and setters
-    public Order(int id, int customerId, List<Product> products) {
-        this.id = id;
-        this.customerId = customerId;
-        this.products = products;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
 }

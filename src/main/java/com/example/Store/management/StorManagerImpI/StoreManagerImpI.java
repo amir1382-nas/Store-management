@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StoreManagerImpI implements StoreManager {
-    private Map<Integer, Product> products = new HashMap<>();
-    private Map<Integer, Customer> customers = new HashMap<>();
-    private Map<Integer, Order> orders = new HashMap<>();
+    private Map<Long, Product> products = new HashMap<>();
+    private Map<Long, Customer> customers = new HashMap<>();
+    private Map<Long, Order> orders = new HashMap<>();
 
 
     @Override
