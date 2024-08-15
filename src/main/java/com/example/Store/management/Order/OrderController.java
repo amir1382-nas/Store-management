@@ -19,20 +19,20 @@ public class OrderController {
         this.orderRepository = orderRepository;
     }
 
-    // دریافت لیست همه سفارشات
+    // Get a list of all orders
     @GetMapping
     public List<Order> getAllOrders() {
         return (List<Order>) orderRepository.findAll();
     }
 
-    // ایجاد یک سفارش جدید
+    // Create a new order
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
         Order savedOrder = orderRepository.save(order);
         return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
     }
 
-    // دریافت یک سفارش با ID مشخص
+    // Receive an order with a specified ID
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
         Optional<Order> order = orderRepository.findById(Math.toIntExact(id));
@@ -40,14 +40,14 @@ public class OrderController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // به‌روزرسانی یک سفارش موجود
+    // Update an existing order
     @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order orderDetails) {
         Optional<Order> orderOptional = orderRepository.findById(Math.toIntExact(id));
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
             order.setCustomerId(orderDetails.getCustomerId());
-            order.setProducts(orderDetails.getProducts()); // در دیتابیس ذخیره نمی‌شود
+            order.setProducts(orderDetails.getProducts()); // It is not stored in the database
             Order updatedOrder = orderRepository.save(order);
             return ResponseEntity.ok(updatedOrder);
         } else {
@@ -55,7 +55,7 @@ public class OrderController {
         }
     }
 
-    // حذف یک سفارش
+    // Delete an order
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         if (orderRepository.existsById(Math.toIntExact(id))) {
