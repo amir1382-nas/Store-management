@@ -1,11 +1,12 @@
 package com.example.Store.management.Customer;
 
+import com.example.Store.management.CreateCustomerRequest;
+import com.example.Store.management.CreateCustomerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,16 +21,28 @@ public class CustomerController {
     }
 
     // Get a list of all customers
-    @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
-    }
+//    @GetMapping
+//    public List<Customer> getAllCustomers() {
+//        return customerRepository.findAll();
+//    }
 
     // Create a new customer
-    @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+    @PostMapping("Add-customer")
+    public ResponseEntity<CreateCustomerResponse> createCustomer(@RequestBody CreateCustomerRequest request) {
+        Customer customer = new Customer();
+        customer.setName(request.getName());
+        customer.setEmail(request.getEmail());
         Customer savedCustomer = customerRepository.save(customer);
-        return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+
+        // Create response with a success message
+        CreateCustomerResponse response = new CreateCustomerResponse(
+                savedCustomer.getId(),
+                savedCustomer.getName(),
+                savedCustomer.getEmail(),
+                "Customer created successfully"
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // Get a customer with a specified ID
@@ -42,7 +55,7 @@ public class CustomerController {
 
     // Update an existing customer
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customerDetails) {
+    public ResponseEntity<Customer> updateCustomerName(@PathVariable Long id, @RequestBody Customer customerDetails) {
         Optional<Customer> customerOptional = customerRepository.findById(id);
         if (customerOptional.isPresent()) {
             Customer customer = customerOptional.get();
@@ -57,7 +70,7 @@ public class CustomerController {
 
     // Delete a customer
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCustomerById(@PathVariable Long id) {
         if (customerRepository.existsById(id)) {
             customerRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

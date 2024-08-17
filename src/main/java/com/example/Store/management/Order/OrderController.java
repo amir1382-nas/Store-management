@@ -11,7 +11,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-
     private final OrderRepository orderRepository;
 
     @Autowired
@@ -20,9 +19,9 @@ public class OrderController {
     }
 
     // Get a list of all orders
-    @GetMapping
+    @GetMapping("/All-order")
     public List<Order> getAllOrders() {
-        return (List<Order>) orderRepository.findAll();
+        return orderRepository.findAll();
     }
 
     // Create a new order
@@ -35,7 +34,7 @@ public class OrderController {
     // Receive an order with a specified ID
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        Optional<Order> order = orderRepository.findById(Math.toIntExact(id));
+        Optional<Order> order = orderRepository.findById(id);
         return order.map(ResponseEntity::ok)
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -43,11 +42,11 @@ public class OrderController {
     // Update an existing order
     @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order orderDetails) {
-        Optional<Order> orderOptional = orderRepository.findById(Math.toIntExact(id));
+        Optional<Order> orderOptional = orderRepository.findById(id);
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
             order.setCustomerId(orderDetails.getCustomerId());
-            order.setProductsId(orderDetails.getProductsId()); // It is not stored in the database
+            order.setProducts(orderDetails.getProducts()); // It is not stored in the database
             Order updatedOrder = orderRepository.save(order);
             return ResponseEntity.ok(updatedOrder);
         } else {
@@ -58,8 +57,8 @@ public class OrderController {
     // Delete an order
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        if (orderRepository.existsById(Math.toIntExact(id))) {
-            orderRepository.deleteById(Math.toIntExact(id));
+        if (orderRepository.existsById(id)) {
+            orderRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
