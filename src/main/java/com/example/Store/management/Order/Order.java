@@ -1,14 +1,16 @@
 package com.example.Store.management.Order;
 
 
-import com.example.Store.management.Product.Product;
-//import jakarta.persistence.;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+
 import java.util.List;
 
 @Entity
@@ -16,15 +18,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orders")
 public class Order {
-
-    @jakarta.persistence.Id    // خونده بشه
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int customerId;
-    @Transient    // خونده بشه
-    private List<Product> products;
 
+    private Long customerId;
+
+    @Transient
+    private List<Long> productIds;
 }
