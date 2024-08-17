@@ -47,7 +47,7 @@ public class OrderController {
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
             order.setCustomerId(orderDetails.getCustomerId());
-            order.setProducts(orderDetails.getProducts()); // It is not stored in the database
+            order.setProductsId(orderDetails.getProductsId()); // It is not stored in the database
             Order updatedOrder = orderRepository.save(order);
             return ResponseEntity.ok(updatedOrder);
         } else {

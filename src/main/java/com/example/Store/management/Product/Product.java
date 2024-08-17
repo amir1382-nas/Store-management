@@ -1,6 +1,5 @@
 package com.example.Store.management.Product;
 
-import com.example.Store.management.Customer.Customer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

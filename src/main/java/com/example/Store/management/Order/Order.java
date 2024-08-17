@@ -26,5 +26,5 @@ public class Order {
     private Long customerId;
 
     @Transient
-    private List<Long> productIds;
+    private List<Long> productsId;
 }
