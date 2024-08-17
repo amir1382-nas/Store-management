@@ -20,12 +20,6 @@ public class CustomerController {
         this.customerRepository = customerRepository;
     }
 
-    // Get a list of all customers
-//    @GetMapping
-//    public List<Customer> getAllCustomers() {
-//        return customerRepository.findAll();
-//    }
-
     // Create a new customer
     @PostMapping("Add-customer")
     public ResponseEntity<CreateCustomerResponse> createCustomer(@RequestBody CreateCustomerRequest request) {
