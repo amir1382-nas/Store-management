@@ -1,9 +1,7 @@
 package com.example.Store.management;
 
-import com.example.Store.management.Customer.Customer;
 import com.example.Store.management.Product.Product;
 import com.example.Store.management.Product.ProductService;
-import com.example.Store.management.StorManagerImpI.StoreManager;
 import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
