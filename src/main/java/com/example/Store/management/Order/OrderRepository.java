@@ -8,10 +8,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-//    void addOrder(Order order);
-//    void updateOrder(Order order);
-//    void deleteOrder(Long orderId);
-//
-//    Order findById(Long id);
-
 }
