@@ -1,5 +1,9 @@
 package com.example.Store.management.Order;
 
+import com.example.Store.management.CreateOrderRequest;
+import com.example.Store.management.CreateOrderResponse;
+import com.example.Store.management.Product.Product;
+import com.example.Store.management.Product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +16,12 @@ import java.util.Optional;
 @RequestMapping("/api/orders")
 public class OrderController {
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public OrderController(OrderRepository orderRepository) {
+    public OrderController(OrderRepository orderRepository, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
     }
 
     // Get a list of all orders
@@ -26,9 +32,22 @@ public class OrderController {
 
     // Create a new order
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+    public ResponseEntity<CreateOrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
+        Order order = new Order();
+        order.setCustomerId(request.getCustomerId());
+
+        // Fetch products by their IDs
+        List<Product> products = productRepository.findAllById(request.getProductIds());
+        order.setProducts(products);
+
         Order savedOrder = orderRepository.save(order);
-        return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
+
+        CreateOrderResponse response = new CreateOrderResponse(
+                savedOrder.getId(),
+                "Order created successfully"
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // Receive an order with a specified ID
@@ -41,12 +60,16 @@ public class OrderController {
 
     // Update an existing order
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order orderDetails) {
+    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody UpdateOrderRequest request) {
         Optional<Order> orderOptional = orderRepository.findById(id);
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
-            order.setCustomerId(orderDetails.getCustomerId());
-            order.setProducts(orderDetails.getProducts()); // It is not stored in the database
+            order.setCustomerId(request.getCustomerId());
+
+            // Fetch products by their IDs
+            List<Product> products = productRepository.findAllById(request.getProductIds());
+            order.setProducts(products);
+
             Order updatedOrder = orderRepository.save(order);
             return ResponseEntity.ok(updatedOrder);
         } else {
