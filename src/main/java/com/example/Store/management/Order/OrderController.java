@@ -2,8 +2,6 @@ package com.example.Store.management.Order;
 
 import com.example.Store.management.CreateOrderRequest;
 import com.example.Store.management.CreateOrderResponse;
-import com.example.Store.management.Product.Product;
-import com.example.Store.management.Product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,32 +11,28 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/orders/1")
+@RequestMapping("/api/orders")
 public class OrderController {
+
     private final OrderRepository orderRepository;
-    private final ProductRepository productRepository;
 
     @Autowired
-    public OrderController(OrderRepository orderRepository, ProductRepository productRepository) {
+    public OrderController(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.productRepository = productRepository;
     }
 
-    // Get a list of all orders
-    @GetMapping("/All-order")
+    // دریافت لیست همه سفارش‌ها
+    @GetMapping("/all-orders")
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
-    // Create a new order
+    // ایجاد سفارش جدید
     @PostMapping
     public ResponseEntity<CreateOrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
         Order order = new Order();
         order.setCustomerId(request.getCustomerId());
-
-        // Fetch products by their IDs
-        List<Product> products = productRepository.findAllById(request.getProductIds());
-        order.setProducts(products);
+        order.setProductIds(request.getProductIds());
 
         Order savedOrder = orderRepository.save(order);
 
@@ -50,7 +44,7 @@ public class OrderController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    // Receive an order with a specified ID
+    // دریافت سفارش با ID مشخص
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
         Optional<Order> order = orderRepository.findById(id);
@@ -58,17 +52,14 @@ public class OrderController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Update an existing order
+    // به‌روزرسانی سفارش موجود
     @PutMapping("/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody UpdateOrderRequest request) {
         Optional<Order> orderOptional = orderRepository.findById(id);
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
             order.setCustomerId(request.getCustomerId());
-
-            // Fetch products by their IDs
-            List<Product> products = productRepository.findAllById(request.getProductIds());
-            order.setProducts(products);
+            order.setProductIds(request.getProductIds());
 
             Order updatedOrder = orderRepository.save(order);
             return ResponseEntity.ok(updatedOrder);
@@ -77,7 +68,7 @@ public class OrderController {
         }
     }
 
-    // Delete an order
+    // حذف سفارش
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         if (orderRepository.existsById(id)) {

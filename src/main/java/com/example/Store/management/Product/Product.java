@@ -1,14 +1,13 @@
 package com.example.Store.management.Product;
 
-import com.example.Store.management.Order.Order;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
-
 
 @Entity
 @Getter
@@ -21,7 +20,4 @@ public class Product {
     private Long id;
     private String name;
     private double price;
-
-    @ManyToMany(mappedBy = "products")
-    private List<Order> orders;
 }

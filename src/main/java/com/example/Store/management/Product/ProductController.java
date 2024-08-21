@@ -19,20 +19,20 @@ public class ProductController {
         this.productService = productService;
     }
 
-    // Get a list of all products
+    // دریافت لیست همه محصولات
     @GetMapping
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    // Create a new product
+    // ایجاد محصول جدید
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product savedProduct = productService.saveProduct(product);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
-    // Receive a product with a specific ID
+    // دریافت محصول با ID مشخص
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         Optional<Product> product = productService.getProductById(id);
@@ -40,7 +40,7 @@ public class ProductController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Update an existing product
+    // به‌روزرسانی محصول موجود
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
         Optional<Product> productOptional = productService.getProductById(id);
@@ -55,7 +55,7 @@ public class ProductController {
         }
     }
 
-    // Remove a product
+    // حذف محصول
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         if (productService.getProductById(id).isPresent()) {
@@ -66,4 +66,3 @@ public class ProductController {
         }
     }
 }
-

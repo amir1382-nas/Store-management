@@ -1,7 +1,5 @@
 package com.example.Store.management.Order;
 
-
-import com.example.Store.management.Product.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,11 +20,7 @@ public class Order {
 
     private Long customerId;
 
-    @ManyToMany
-    @JoinTable(
-            name = "order_products",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products;
+    // به جای رابطه با موجودیت‌های دیگر، فقط ID محصولات را ذخیره می‌کنیم
+    @ElementCollection
+    private List<Long> productIds;
 }
